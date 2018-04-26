@@ -16,8 +16,8 @@ const Wrapper = styled.div`
 `;
 
 const InfoInnerWrapper = styled.div`
-  position: ${props => (props.affix ? 'fixed' : 'static')};
   display: grid;
+  position: ${props => (props.affix ? 'fixed' : 'static')}
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   height: 100%;
@@ -29,17 +29,30 @@ const InfoContainer = styled.div`
 
 class LaborEvents extends Component {
   story = React.createRef();
+  state = {
+    offset: 0,
+    offsetBottom: 0,
+  }
   componentDidMount() {
+    if (this.story.current) {
+      this.setupOffset();
+    }
+  }
 
+  setupOffset() {
+    this.setState({
+      offset: this.story.current.getBoundingClientRect().top,
+      offsetBottom: this.story.current.getBoundingClientRect().height - window.innerHeight,
+    });
   }
 
   render() {
     return (
-      <AffixComponent offset={50} offsetBottom={this.story.current ? this.story.current.clientHeight : null}>
+      <AffixComponent offset={this.state.offset} offsetBottom={this.state.offsetBottom}>
         {affix => (
           <Wrapper>
             <InfoContainer>
-              <InfoInnerWrapper affix={affix} >
+              <InfoInnerWrapper affix={affix} offsetBottom={this.state.offsetBottom}>
                 adslfkjashdfkladshjfklajsdhfdklhj
               </InfoInnerWrapper>
             </InfoContainer>
